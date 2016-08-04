@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/sheli16/ArchaeologyToday/issues"
   },
-  "homepage": "https://github.com/sheli16/ArchaeologyToday#readme"
+  "homepage": "https://github.com/sheli16/ArchaeologyToday#readme",
+  "dependencies": {
+    "express-handlebars": "^3.0.0",
+    "express3": "0.0.0",
+    "handlebars": "^4.0.5",
+    "mongodb": "^2.2.5"
+  }
 }

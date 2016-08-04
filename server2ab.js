@@ -4,6 +4,7 @@
 // Initialize Express app
 var express = require('express');
 var app = express();
+var exphbs = require('express3-handlebars');
 
 // Require request and cheerio. This makes the scraping possible
 var request = require('request');
@@ -13,6 +14,8 @@ var cheerio = require('cheerio');
 var mongojs = require('mongojs');
 var databaseUrl = "archdb";
 var collections = ["headlines"];
+var db = mongojs(databaseUrl, collections);
+
 
 // first, tell the console what server2.js is doing
 console.log("\n******************************************\n" +
@@ -20,19 +23,28 @@ console.log("\n******************************************\n" +
             "from the Archaeology website:" +
             "\n******************************************\n")
 
-var db = mongojs(databaseUrl, collections);
+
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+ 
+app.get('/', function (req, res) {
+    res.render('home');
+});
+
+
 
 // this makes sure that any errors are logged if mongodb runs into an issue
-db.on('error', function(err) {
-  console.log('Database Error:', err);
-});
+
+
 
 // Main route (simple Hello World Message)
 app.get('/', function(req, res) {
   res.send("Archaeology Today");
 });
 
-// make a request call for nhl.com's homepage 
+app.use('/views', express.static('indexS.html'));
+
+// make a request call for Archaeology.org's homepage 
 
 request('http://www.archaeology.org/news', function (error, response, html) {
 
@@ -71,6 +83,7 @@ request('http://www.archaeology.org/news', function (error, response, html) {
             "This function is working\n" +
             "from the Archaeology website:" +
             "\n******************************************\n");
+console.log(result.title);
 
 });
 
@@ -88,41 +101,17 @@ else{
             "Last function \n" +
             "from the Archaeology website:" +
             "\n******************************************\n");
-  console.log(saved);
+  
+db.getCollection('archdb.headlines').find({})
+db.getCollection('archdb.headlines').insert({})
+
+
 }
 });
 });
 
 // // listen on port 3000
-// app.listen(3000, function() {
-//   console.log('App running on port 3000!');
-// });
+ app.listen(3000, function() {
+ console.log('App running on port 3000!');
+});
 
-
-
-// console.log(result);
-
-// // make a request call for nhl.com's homepage 
-// request(result.link, function (error, response, html) {
-
-//   // load the body of the html into cheerio
-//   var $ = cheerio.load(html);
-
-//   // an empty array to save our scraped data
-//   var articleImg = [];
-
-//   // With cheerio, find each span.news_title -tag with the class "headline-link"
-//   $('p.span').each(function(i, element){
-
-
-// var imgLink = $(element).find('p').find('img').attr("src");
-
-//       // and push it to the result array
-//       result.push({
-//         pic:imgLink
-//       });
-//     });
-//  // after the program scans each  span.news_title .headline-link, log the result
-//   console.log(result);
-//   return result
-//   });

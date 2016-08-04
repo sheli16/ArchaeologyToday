@@ -25,3 +25,10 @@ h1 {
 	font-weight:600;
 	font-family: 'Revalia', cursive;
 }
+
+h3 {
+	font-size: 30px;
+	color:;
+	font-weight:200;
+	/*font-family: 'Revalia', cursive;*/
+}
